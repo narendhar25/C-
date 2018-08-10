@@ -1,0 +1,34 @@
+﻿@model WebApiTestMvc.Models.Employee
+@using WebApiTestMvc.Models;
+@using System.Web.Mvc;
+@{
+    ViewBag.Title = "Index";
+}
+@*<input type="submit" value="Submit" />
+    @Helpers.EncodedActionLink(@Html.ActionLink("Admin", "Index", "Home", null),"Narendhar","Index","Home",new {name="Narendhar" },null)*@
+<br />
+@Html.EditorFor(s => s.Name)
+@Html.TextBoxFor(s => s.Name)<br />
+@Html.EditorFor(s => s.Age)
+@Html.TextBoxFor(s => s.Age)
+<br />
+@Html.EditorFor(s => s.Married)
+@Html.TextBoxFor(s => s.Married)
+
+@Ajax.BeginForm("",new AjaxOptions {InsertionMode=InsertionMode.InsertAfter, }){
+}
+
+
+
+@Html.ActionLink("Click", "Redirect");
+
+
+
+<br />
+<br />
+@TempData["TempData"]
+@{TempData.Keep("TempData")}
+@ViewData["ViewData"]
+@ViewBag.ViewBag
+
+
