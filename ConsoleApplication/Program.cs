@@ -23,8 +23,14 @@ namespace ConsoleApplication
         //public static DateTime date;
         static void Main(string[] args)
         {
-            PasswordHash passwordHash = new PasswordHash();
-            passwordHash.GeneratePasswordHash("Qwerty");
+            EmailSend emailSend = new EmailSend();
+            emailSend.Send();
+            //AsyncClass dd = new AsyncClass();
+            //Task<string> name =dd.GetString();
+            //Console.WriteLine("NAme");
+            //Console.WriteLine(name.Result+"after NAme");
+            //PasswordHash passwordHash = new PasswordHash();
+            //passwordHash.GeneratePasswordHash("Qwerty");
             //Customer dd= CreateInstance<Customer>.Create();
             //Type type=  dd.GetType();
             //PropertyInfo[] propertyInfo = type.GetProperties();
@@ -51,6 +57,14 @@ namespace ConsoleApplication
                 Name = "Name" + id,
                 Type = CustomerType.GoldCustomer
             };
+        }
+    }
+    public class AsyncClass
+    {
+        public async Task<string> GetString()
+        {
+            await Task.Delay(1000);
+            return "Narendhar";
         }
     }
     class ApplicationHelper
