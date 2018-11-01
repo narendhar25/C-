@@ -24,7 +24,7 @@ namespace EmailService
         private int[] width = { 100, 305, 100, 100, 213 };
         private string tablestyles = "table-layout:fixed;font-size:10pt;font-family:arial,sans,sans-serif;width:0px;border-collapse:collapse;border:none";
         private string filePath = Environment.CurrentDirectory + "\\EmailConfig.xml";
-        private string key = "96374584712547893347Mykeys*#@12";
+        private string key = "AAECAwQFBgcICQoLDA0ODw==";
         private EmailConfiguration configuration = null;
         #endregion
 
@@ -36,7 +36,95 @@ namespace EmailService
         #endregion
 
         #region Public Methods
-        public void ReadFromExcel()
+        public bool SaveConfig(EmailConfiguration configuration)
+        {
+            FileStream file = null;
+            try
+            {
+                configuration.Password = CryptoEngine.Encrypt(configuration.Password, key);
+                if (!File.Exists(filePath))
+                    file = File.Create(filePath);
+                else
+                    file = File.OpenWrite(filePath);
+
+                TextWriter textWriter = new StreamWriter(file);
+                XmlSerializer ser = new XmlSerializer(typeof(EmailConfiguration));
+                ser.Serialize(textWriter, configuration);
+                file.Close();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            finally {
+                if (file != null)
+                {
+                    file.Close();
+                }
+            }
+
+        }
+        public bool SendMail()
+        {
+            try
+            {
+                MailMessage mail = new MailMessage();
+                SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+                string messageBody = null;
+                if (configuration.ReadFromGoogleSheet)
+                {
+                    Tuple<List<string>, List<List<string>>> tuple = ReadFromGoogleSheet();
+                    messageBody = FormatMesssage(tuple.Item1, tuple.Item2);
+                }
+                mail.From = new MailAddress(configuration.From);
+                configuration.To.ForEach(s =>
+                {
+                    mail.To.Add(s);
+                });
+                if (configuration.CC.Any())
+                {
+                    configuration.CC.ForEach(s =>
+                    {
+                        mail.CC.Add(s);
+                    });
+                }
+                if (configuration.BCC.Any())
+                {
+                    configuration.BCC.ForEach(s =>
+                    {
+                        mail.Bcc.Add(s);
+                    });
+                }
+                mail.Subject = configuration.Subject.Replace("{date}", DateTime.Now.ToString("dd-MM-yyyy"));
+                mail.Body = configuration.EmailBody;
+                if (!string.IsNullOrWhiteSpace(messageBody))
+                {
+                    mail.Body += "<br><br>" + messageBody.ToString();
+                }
+                mail.IsBodyHtml = true;
+                SmtpServer.Port = 587;
+                SmtpServer.Credentials = new System.Net.NetworkCredential(configuration.From, configuration.Password);
+                SmtpServer.EnableSsl = true;
+
+                SmtpServer.Send(mail);
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw;
+            }
+            
+            return true;
+        }
+        public EmailConfiguration GetEmailConfiguration()
+        {
+            return this.configuration;
+        }
+        #endregion
+
+        #region Private Mathods
+        private void ReadFromExcel()
         {
             try
             {
@@ -99,14 +187,14 @@ namespace EmailService
 
             }
         }
-        public Tuple<List<string>, List<List<string>>> ReadFromGoogleSheet()
+        private Tuple<List<string>, List<List<string>>> ReadFromGoogleSheet()
         {
             try
             {
                 string credPath = "token.json";
                 string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
                 FileStream fileStream = new FileStream(Environment.CurrentDirectory + "//credentials.json", FileMode.Open, FileAccess.Read);
-                UserCredential credential = GoogleWebAuthorizationBroker.AuthorizeAsync(GoogleClientSecrets.Load(fileStream).Secrets, Scopes, "narendhar.pannala@ggktech.com", CancellationToken.None,
+                UserCredential credential = GoogleWebAuthorizationBroker.AuthorizeAsync(GoogleClientSecrets.Load(fileStream).Secrets, Scopes, configuration.From, CancellationToken.None,
                         new FileDataStore(credPath, true)).Result;
                 // Create Google Sheets API service.
                 var service = new SheetsService(new BaseClientService.Initializer()
@@ -116,10 +204,10 @@ namespace EmailService
                 });
 
                 // Define request parameters.
-                String spreadsheetId = "19LrX4c6aCUI6K7Clx8utP-VdOXbO5gPkz35P_qnsUCM";
-                String range = "A:AZ";
+                string[] spreadsheetId = configuration.GoogleSheetURL.Split('/');//(configuration.GoogleSheetURL.LastIndexOf('/') + 1, (configuration.GoogleSheetURL.Length - configuration.GoogleSheetURL.LastIndexOf('/')) - 1);
+                string range = "A:AZ";
                 SpreadsheetsResource.ValuesResource.GetRequest request =
-                        service.Spreadsheets.Values.Get(spreadsheetId, range);
+                        service.Spreadsheets.Values.Get(spreadsheetId[spreadsheetId.Length-2], range);
                 ValueRange response = request.Execute();
                 IList<IList<Object>> values = response.Values;
                 List<string> columns = (from p in values[0] select p.ToString()).ToList();
@@ -133,72 +221,18 @@ namespace EmailService
                 throw;
             }
         }
-        public bool SaveConfig()
-        {
-            try
-            {
-                configuration.Password = CryptoEngine.Encrypt(configuration.Password, key);
-                FileStream file = null;
-                if (!File.Exists(filePath))
-                    file = File.Create(filePath);
-                else
-                    file = File.OpenWrite(filePath);
-
-                TextWriter textWriter = new StreamWriter(file);
-                XmlSerializer ser = new XmlSerializer(typeof(EmailConfiguration));
-                ser.Serialize(textWriter, configuration);
-                file.Close();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-
-        }
-        public void SendMail(Tuple<List<string>, List<List<string>>> data, EmailConfiguration configuration)
-        {
-            MailMessage mail = new MailMessage();
-            SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
-            string messageBody = FormatMesssage(data.Item1, data.Item2);
-            mail.From = new MailAddress(configuration.From);
-            configuration.To.ForEach(s =>
-            {
-                mail.To.Add(s);
-            });
-            configuration.CC.ForEach(s =>
-            {
-                mail.CC.Add(s);
-            });
-            mail.Subject = configuration.Subject;
-            mail.Body = configuration.EmailBody;
-            if (!string.IsNullOrWhiteSpace(messageBody))
-            {
-                mail.Body += "<br><br>" + messageBody.ToString();
-            }
-            mail.IsBodyHtml = true;
-            SmtpServer.Port = 587;
-            SmtpServer.Credentials = new System.Net.NetworkCredential(configuration.From, configuration.Password);
-            SmtpServer.EnableSsl = true;
-
-            SmtpServer.Send(mail);
-        }
-        #endregion
-
-        #region Private Mathods
         private EmailConfiguration GetConfiguration()
         {
-
+            FileStream textReader = null;
             try
             {
-                FileStream file = null;
                 if (File.Exists(filePath))
                 {
-                    FileStream textReader = new FileStream(filePath, FileMode.Open);
+                    textReader = new FileStream(filePath, FileMode.Open);
                     XmlSerializer ser = new XmlSerializer(typeof(EmailConfiguration));
                     EmailConfiguration configuration = (EmailConfiguration)ser.Deserialize(textReader);
                     configuration.Password = CryptoEngine.Decrypt(configuration.Password, key);
-                    file.Close();
+                    textReader.Close();
                     return configuration;
                 }
                 return null;
@@ -206,6 +240,12 @@ namespace EmailService
             catch (Exception ex)
             {
                 return null;
+            }
+            finally {
+                if (textReader != null)
+                {
+                    textReader.Close();
+                }
             }
         }
         private string FormatMesssage(List<string> columns, List<List<string>> rows)
@@ -215,7 +255,7 @@ namespace EmailService
             textBody.Append("<colgroup>");
             for (int colcount = 0; colcount < columns.Count; colcount++)
             {
-                textBody.Append("<col width='auto'>");
+                textBody.AppendFormat("<col width='{0}'>",width[colcount]);
             }
             textBody.Append("<colgroup>");
             textBody.Append("<tbody>");

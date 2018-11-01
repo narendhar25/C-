@@ -1,4 +1,5 @@
 ﻿using ConsoleApplication;
+using EmailService;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -23,23 +24,9 @@ namespace ConsoleApplication
         //public static DateTime date;
         static void Main(string[] args)
         {
-            EmailSend emailSend = new EmailSend();
-            emailSend.Send();
-            //AsyncClass dd = new AsyncClass();
-            //Task<string> name =dd.GetString();
-            //Console.WriteLine("NAme");
-            //Console.WriteLine(name.Result+"after NAme");
-            //PasswordHash passwordHash = new PasswordHash();
-            //passwordHash.GeneratePasswordHash("Qwerty");
-            //Customer dd= CreateInstance<Customer>.Create();
-            //Type type=  dd.GetType();
-            //PropertyInfo[] propertyInfo = type.GetProperties();
-            //foreach(var property in propertyInfo)
-            //{
-            //    Console.WriteLine(property.Name+" "+property.PropertyType +" "+property.GetHashCode());
-            //}
-            //Console.Write(dd.GetType());
-            //SaltGeneration.GenerateSalt();
+            MailService emailService = new MailService();
+           
+
             Console.ReadLine();
         }
         public async Task<Customer[]> GetCustomersAsync(List<int> IDs)
