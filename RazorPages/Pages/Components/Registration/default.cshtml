@@ -1,0 +1,7 @@
+﻿@model Dictionary<int,string>
+<select>
+    @foreach (var user in Model)
+    {
+        <option value="user.key">@user.Value</option>
+    }
+</select>

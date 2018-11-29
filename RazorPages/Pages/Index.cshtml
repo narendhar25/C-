@@ -1,6 +1,91 @@
-﻿@page
+﻿@page "{handler?}"
 @model IndexModel
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@RouteData.Values["title"]</title>
+</head>
 @{
-    ViewData["Title"] = "Home page";
+    Dictionary<string, string> asss = new Dictionary<string, string>();
+    asss.Add("id", "123");
+    asss.Add("name", "sdfsdf");
+
 }
+<body>
+    <form method="post" asp-page-handler="add" asp-all-route-data="@asss">
+        <div class="row">
+            <div class="form-group">
+                <label class="control-label">Name</label>
+                <input type="text" class="form-control" name="Name" />
+                @RouteData.Values["title"]
+            </div>
+            <div class="form-group">
+                <label class="control-label">Age</label>
+                <input type="number" class="form-control" name="Age" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Address</label>
+                <textarea class="form-control" rows="2" name="Address"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Values</label>
+                @*@await Component.InvokeAsync("Registration")*@
+
+
+            </div>
+            <div class="col-md-3">
+                @await Component.InvokeAsync("Users", new Random().Next(1, 10))
+            </div>
+            <div>
+                <vc:registration></vc:registration>
+            </div>
+            <div>
+                <partial name="_MyPartial" model="@Model.partialModel" />
+            </div>
+        </div>
+        <button class="btn btn-default">Submit</button>
+        <a asp-route-id="asd">sdfsdf</a>
+        <img asp-append-version="true" src="~/images/banner1.svg" />
+    </form>
+    <div class="col-lg-1">
+        <form asp-page-handler="" method="post">
+            <button class="btn btn-default">View</button>
+        </form>
+    </div>
+    <h3 class="clearfix">@Model.Message</h3>
+    <div class="row">
+        <div class="col-lg-1">
+            <form asp-page-handler="Add" method="post">
+                <button class="btn btn-default">Edit</button>
+            </form>
+        </div>
+        <div class="col-lg-1">
+            <form asp-page-handler="Edit" method="get">
+
+                <button class="btn btn-default">Delete</button>
+            </form>
+        </div>
+        <div class="col-lg-1">
+            <form asp-page-handler="Edit" method="get">
+                <button class="btn btn-default" asp-page-handler="Edit">View</button>
+                <button class="btn btn-default" asp-page-handler="Values">View1</button>
+            </form>
+        </div>
+
+    </div>
+    @*<select asp-items="@Model." asp-for=""></select>*@
+</body>
+<cache expires-sliding="TimeSpan.FromSeconds(05)">@DateTime.Now</cache>
+<environment include="Production">
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+</environment>
+<br />
+<h1>@Model.BindData</h1>
+<h3>@ViewData["MyValue"]</h3>
+<h3>@TempData["MyTempData"]</h3>
+</html>
 

@@ -43,9 +43,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailService", "EmailServic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailApp", "D:\EmailApp\EmailApp.csproj", "{90C92383-2447-46F1-93C8-04465FEA5FE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazorPages", "RazorPages\RazorPages.csproj", "{948B968A-EC28-45EA-BC3A-65E1CEB79AE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazorPages", "RazorPages\RazorPages.csproj", "{948B968A-EC28-45EA-BC3A-65E1CEB79AE9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JWTWebAPI", "JWTWebAPI\JWTWebAPI.csproj", "{9D1C5ACF-9DFA-495E-82FD-0FFF24E34F24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication2", "WebApplication2\WebApplication2.csproj", "{2279012B-8AD8-44B9-8E70-47509FE96710}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -129,6 +131,10 @@ Global
 		{9D1C5ACF-9DFA-495E-82FD-0FFF24E34F24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D1C5ACF-9DFA-495E-82FD-0FFF24E34F24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9D1C5ACF-9DFA-495E-82FD-0FFF24E34F24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2279012B-8AD8-44B9-8E70-47509FE96710}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2279012B-8AD8-44B9-8E70-47509FE96710}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2279012B-8AD8-44B9-8E70-47509FE96710}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2279012B-8AD8-44B9-8E70-47509FE96710}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,28 @@
+﻿@page
+@model RazorPages.Pages.InputTagModel
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>InputTag</title>
+</head>
+<body>
+    <form asp-action="OnPost" method="post">
+        <input asp-for="member.PersonId" class="form-control" /><br />
+        <input asp-for="member.Name" class="form-control"/><br />
+        <input asp-for="member.Email" class="form-control"/><br />
+        <input asp-for="member.Password" class="form-control"/><br />
+        <input asp-for="member.Telephone" class="form-control"/><br />
+        <input asp-for="member.Website" class="form-control"/><br />
+        <input asp-for="member.DateOfBirth" class="form-control"/><br />
+        <input asp-for="member.Salary" class="form-control"/><br />
+        <input asp-for="member.SendSpam"/><br />
+        <input asp-for="member.NumberOfCats" class="form-control"/><br />
+        <input asp-for="member.Selfie" class="form-control"/><br />
+        <button>Submit</button>
+    </form>
+</body>
+</html>

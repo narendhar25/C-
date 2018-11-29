@@ -33,7 +33,8 @@
                     <li><a asp-page="/Index">Home</a></li>
                     <li><a asp-page="/About">About</a></li>
                     <li><a asp-page="/Contact">Contact</a></li>
-                    <li><a asp-page="/Emp/Registration">Registration</a></li>
+                    <li><a asp-page="/Emp/Registration" asp-route-title="Registration" asp-route-BindData="BindData">Registration</a></li>
+                    <li><a asp-page="/InputTag">InputTag</a></li>
                 </ul>
             </div>
         </div>
@@ -42,12 +43,15 @@
     <partial name="_CookieConsentPartial" />
 
     <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2018 - RazorPages</p>
-        </footer>
+        <div class="col-md-9">
+            @RenderBody()
+        </div>
+       
     </div>
+    <hr />
+    <footer class="container">
+        <p>&copy; 2018 - RazorPages</p>
+    </footer>
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>

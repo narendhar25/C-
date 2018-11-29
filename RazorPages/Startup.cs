@@ -7,8 +7,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RazorPages.Services;
 
 namespace RazorPages
 {
@@ -31,10 +33,19 @@ namespace RazorPages
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
-            services.AddMvc().AddRazorPagesOptions(options => {
+            //services.AddMvc().AddRazorPagesOptions(options =>
+            //{
+            //    options.Conventions.Add(new CustomRoutes());
+            //});
+            services.AddMvc().AddRazorPagesOptions(options =>
+            {
                 options.AllowMappingHeadRequestsToGetHandler = false;
+                //options.Conventions.AddPageRoute("/index", "{*url}");
+                //options.RootDirectory = "";
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddTransient<IUserService, UserService>();
+           // services.Configure<MvcOptions>(options => options.Filters.Add(new RequireHttpsAttribute{ Permanent = true }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,7 +60,6 @@ namespace RazorPages
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
