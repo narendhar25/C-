@@ -57,7 +57,8 @@ namespace EmailService
             {
                 return false;
             }
-            finally {
+            finally
+            {
                 if (file != null)
                 {
                     file.Close();
@@ -71,12 +72,6 @@ namespace EmailService
             {
                 MailMessage mail = new MailMessage();
                 SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
-                string messageBody = null;
-                if (configuration.ReadFromGoogleSheet)
-                {
-                    Tuple<List<string>, List<List<string>>> tuple = ReadFromGoogleSheet();
-                    messageBody = FormatMesssage(tuple.Item1, tuple.Item2);
-                }
                 mail.From = new MailAddress(configuration.From);
                 configuration.To.ForEach(s =>
                 {
@@ -97,11 +92,7 @@ namespace EmailService
                     });
                 }
                 mail.Subject = configuration.Subject.Replace("{date}", DateTime.Now.ToString("dd-MM-yyyy"));
-                mail.Body = configuration.EmailBody;
-                if (!string.IsNullOrWhiteSpace(messageBody))
-                {
-                    mail.Body += "<br><br>" + messageBody.ToString();
-                }
+                mail.Body = GetEmailBody();
                 mail.IsBodyHtml = true;
                 SmtpServer.Port = 587;
                 SmtpServer.Credentials = new System.Net.NetworkCredential(configuration.From, configuration.Password);
@@ -114,12 +105,29 @@ namespace EmailService
                 return false;
                 throw;
             }
-            
+
             return true;
         }
         public EmailConfiguration GetEmailConfiguration()
         {
             return this.configuration;
+        }
+
+        public string GetEmailBody()
+        {
+            string message = "";
+            string messageFromsheet = null;
+            message = configuration.EmailBody;
+            if (configuration.ReadFromGoogleSheet)
+            {
+                Tuple<List<string>, List<List<string>>> tuple = ReadFromGoogleSheet();
+                messageFromsheet = FormatMesssage(tuple.Item1, tuple.Item2);
+            }
+            if (!string.IsNullOrWhiteSpace(messageFromsheet))
+            {
+                message += "<br><br>" + messageFromsheet.ToString();
+            }
+            return message;
         }
         #endregion
 
@@ -207,11 +215,14 @@ namespace EmailService
                 string[] spreadsheetId = configuration.GoogleSheetURL.Split('/');//(configuration.GoogleSheetURL.LastIndexOf('/') + 1, (configuration.GoogleSheetURL.Length - configuration.GoogleSheetURL.LastIndexOf('/')) - 1);
                 string range = "A:AZ";
                 SpreadsheetsResource.ValuesResource.GetRequest request =
-                        service.Spreadsheets.Values.Get(spreadsheetId[spreadsheetId.Length-2], range);
+                        service.Spreadsheets.Values.Get(spreadsheetId[spreadsheetId.Length - 2], range);
                 ValueRange response = request.Execute();
                 IList<IList<Object>> values = response.Values;
+                List<List<Object>> todaysStatus = new List<List<Object>>() ;
+                GetTodayStatus(values,ref todaysStatus);
                 List<string> columns = (from p in values[0] select p.ToString()).ToList();
-
+                columns.RemoveRange(0, 2);
+                columns.RemoveRange(5, 4);
                 values.RemoveAt(0);
                 List<List<string>> rows = values.Select(s => s.Select(a => a.ToString()).ToList()).ToList();
                 return new Tuple<List<string>, List<List<string>>>(columns, rows);
@@ -241,7 +252,8 @@ namespace EmailService
             {
                 return null;
             }
-            finally {
+            finally
+            {
                 if (textReader != null)
                 {
                     textReader.Close();
@@ -255,7 +267,7 @@ namespace EmailService
             textBody.Append("<colgroup>");
             for (int colcount = 0; colcount < columns.Count; colcount++)
             {
-                textBody.AppendFormat("<col width='{0}'>",width[colcount]);
+                textBody.AppendFormat("<col width='{0}'>", width[colcount]);
             }
             textBody.Append("<colgroup>");
             textBody.Append("<tbody>");
@@ -292,6 +304,23 @@ namespace EmailService
             }
             return value;
         }
+        private void GetTodayStatus(IList<IList<Object>> Status,ref List<List<Object>> todaysStatus)
+        {
+            for(int count = 0; count < Status.Count; count++)
+            {
+                if (!string.IsNullOrWhiteSpace(Status[Status.Count - count].ElementAt(1).ToString()))
+                {
+                    todaysStatus.Add((List<Object>)Status[Status.Count - count]);
+                    break;
+                }
+                else
+                {
+                    todaysStatus.Add((List<Object>)Status[Status.Count - count]);
+                }
+            }
+            todaysStatus.Reverse();
+        }
+
         #endregion
 
     }

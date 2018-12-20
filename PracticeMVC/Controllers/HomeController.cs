@@ -14,11 +14,12 @@ namespace PracticeMVC.Controllers
             //_employee = employee;
         }
         // GET: Home
+        [Authorize]
         public ActionResult Index()
         {
             try
             {
-                Employee employee = _employee.GetEmployee(10);
+               // Employee employee = _employee.GetEmployee(10);
                 return View();
             }
             catch (Exception)
@@ -27,5 +28,10 @@ namespace PracticeMVC.Controllers
             }
             
         }
+        public ActionResult Login()
+        {
+            return View("Login");
+        }
+        
     }
 }
