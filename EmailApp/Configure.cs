@@ -88,73 +88,83 @@ namespace EmailApp
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            string fromEmail = txtFrom.Text;
-            string toEmail = txtTo.Text;
-            string ccEmail = txtCC.Text;
-            string bccEmail = txtBCC.Text;
-            string subject = txtSubject.Text;
-            string body = txtBody.Text;
-            bool readFromGoogleSheet = rdoReadFromGoogleSheetYes.Checked;
-            string googleSheetUrl = txtGoogleSheetURL.Text;
-            string password = txtPassword.Text;
-            List<string> Errors = new List<string>();
-            if (fromEmail.Length == 0 || !Helper.IsValidMailAddress(fromEmail))
+            try
             {
-                Errors.Add("Invalid From Email Address");
-            }
-            if (toEmail.Length == 0)
-            {
-                Errors.Add("Invalid To Email Address");
-            }
-            //if (ccEmail.Length == 0)
-            //{
-            //    Errors.Add("Invalid CC Email Address");
-            //}
-            if (subject.Length == 0)
-            {
-                Errors.Add("Invalid Email Subject");
-            }
-            if (body.Length == 0)
-            {
-                Errors.Add("Invalid Email Body");
-            }
-            if (readFromGoogleSheet && password.Length == 0)
-            {
-                Errors.Add("Invalid Password");
-            }
-            if (readFromGoogleSheet && googleSheetUrl.Length == 0)
-            {
-                Errors.Add("Invalid GoogleSheet URL");
-            }
-            if (Errors.Count > 0)
-            {
-                MessageBox.Show(string.Join(Environment.NewLine, Errors), "Errors", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else
-            {
-                body = body.Replace(Environment.NewLine, "<br>");
-                body = body.Replace("\n", "<br>");
-                EmailConfiguration emailConfiguration = new EmailConfiguration();
-                emailConfiguration.CC = string.IsNullOrWhiteSpace(ccEmail) ? null : ccEmail.Split(',').ToList();
-                emailConfiguration.BCC = string.IsNullOrWhiteSpace(ccEmail) ? null : bccEmail.Split(',').ToList();
-                emailConfiguration.EmailBody = body;
-                emailConfiguration.From = fromEmail;
-                emailConfiguration.GoogleSheetURL = googleSheetUrl;
-                emailConfiguration.ReadFromGoogleSheet = readFromGoogleSheet;
-                emailConfiguration.Subject = subject;
-                emailConfiguration.Password = password;
-                emailConfiguration.To = toEmail.Split(',').ToList();
-                EmailService.MailService a = new MailService();
-                if (a.SaveConfig(emailConfiguration))
+
+
+                string fromEmail = txtFrom.Text;
+                string toEmail = txtTo.Text;
+                string ccEmail = txtCC.Text;
+                string bccEmail = txtBCC.Text;
+                string subject = txtSubject.Text;
+                string body = txtBody.Text;
+                bool readFromGoogleSheet = rdoReadFromGoogleSheetYes.Checked;
+                string googleSheetUrl = txtGoogleSheetURL.Text;
+                string password = txtPassword.Text;
+                List<string> Errors = new List<string>();
+                if (fromEmail.Length == 0 || !Helper.IsValidMailAddress(fromEmail))
                 {
-                    MessageBox.Show("Email Configuaration saved successfully");
-                    this.Close();
-                    this.frmEmail.ReBindValues();
+                    Errors.Add("Invalid From Email Address");
+                }
+                if (toEmail.Length == 0)
+                {
+                    Errors.Add("Invalid To Email Address");
+                }
+                //if (ccEmail.Length == 0)
+                //{
+                //    Errors.Add("Invalid CC Email Address");
+                //}
+                if (subject.Length == 0)
+                {
+                    Errors.Add("Invalid Email Subject");
+                }
+                if (body.Length == 0)
+                {
+                    Errors.Add("Invalid Email Body");
+                }
+                if (readFromGoogleSheet && password.Length == 0)
+                {
+                    Errors.Add("Invalid Password");
+                }
+                if (readFromGoogleSheet && googleSheetUrl.Length == 0)
+                {
+                    Errors.Add("Invalid GoogleSheet URL");
+                }
+                if (Errors.Count > 0)
+                {
+                    MessageBox.Show(string.Join(Environment.NewLine, Errors), "Errors", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else
                 {
-                    MessageBox.Show("Email Configuaration saved failed");
+                    body = body.Replace(Environment.NewLine, "<br>");
+                    body = body.Replace("\n", "<br>");
+                    EmailConfiguration emailConfiguration = new EmailConfiguration();
+                    emailConfiguration.CC = string.IsNullOrWhiteSpace(ccEmail) ? null : ccEmail.Split(',').ToList();
+                    emailConfiguration.BCC = string.IsNullOrWhiteSpace(ccEmail) ? null : bccEmail.Split(',').ToList();
+                    emailConfiguration.EmailBody = body;
+                    emailConfiguration.From = fromEmail;
+                    emailConfiguration.GoogleSheetURL = googleSheetUrl;
+                    emailConfiguration.ReadFromGoogleSheet = readFromGoogleSheet;
+                    emailConfiguration.Subject = subject;
+                    emailConfiguration.Password = password;
+                    emailConfiguration.To = toEmail.Split(',').ToList();
+                    EmailService.MailService a = new MailService();
+                    if (a.SaveConfig(emailConfiguration))
+                    {
+                        MessageBox.Show("Email Configuaration saved successfully");
+                        this.Close();
+                        this.frmEmail.ReBindValues();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Email Configuaration saved failed");
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
             }
         }
         private void btnToClear_Click(object sender, EventArgs e)

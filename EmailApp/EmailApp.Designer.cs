@@ -43,13 +43,15 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.configureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.webBody = new System.Windows.Forms.WebBrowser();
+            this.lblDate = new System.Windows.Forms.Label();
+            this.dteDate = new System.Windows.Forms.DateTimePicker();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblFrom
             // 
             this.lblFrom.AutoSize = true;
-            this.lblFrom.Location = new System.Drawing.Point(59, 57);
+            this.lblFrom.Location = new System.Drawing.Point(57, 84);
             this.lblFrom.Name = "lblFrom";
             this.lblFrom.Size = new System.Drawing.Size(30, 13);
             this.lblFrom.TabIndex = 0;
@@ -57,7 +59,7 @@
             // 
             // txtFrom
             // 
-            this.txtFrom.Location = new System.Drawing.Point(140, 57);
+            this.txtFrom.Location = new System.Drawing.Point(138, 84);
             this.txtFrom.Name = "txtFrom";
             this.txtFrom.ReadOnly = true;
             this.txtFrom.Size = new System.Drawing.Size(903, 20);
@@ -66,7 +68,7 @@
             // lblTo
             // 
             this.lblTo.AutoSize = true;
-            this.lblTo.Location = new System.Drawing.Point(59, 98);
+            this.lblTo.Location = new System.Drawing.Point(57, 125);
             this.lblTo.Name = "lblTo";
             this.lblTo.Size = new System.Drawing.Size(20, 13);
             this.lblTo.TabIndex = 2;
@@ -74,7 +76,7 @@
             // 
             // txtTo
             // 
-            this.txtTo.Location = new System.Drawing.Point(140, 95);
+            this.txtTo.Location = new System.Drawing.Point(138, 122);
             this.txtTo.Name = "txtTo";
             this.txtTo.ReadOnly = true;
             this.txtTo.Size = new System.Drawing.Size(903, 20);
@@ -83,7 +85,7 @@
             // lblCC
             // 
             this.lblCC.AutoSize = true;
-            this.lblCC.Location = new System.Drawing.Point(59, 134);
+            this.lblCC.Location = new System.Drawing.Point(57, 161);
             this.lblCC.Name = "lblCC";
             this.lblCC.Size = new System.Drawing.Size(21, 13);
             this.lblCC.TabIndex = 5;
@@ -91,7 +93,7 @@
             // 
             // txtCC
             // 
-            this.txtCC.Location = new System.Drawing.Point(140, 134);
+            this.txtCC.Location = new System.Drawing.Point(138, 161);
             this.txtCC.Name = "txtCC";
             this.txtCC.ReadOnly = true;
             this.txtCC.Size = new System.Drawing.Size(903, 20);
@@ -100,7 +102,7 @@
             // lblSubject
             // 
             this.lblSubject.AutoSize = true;
-            this.lblSubject.Location = new System.Drawing.Point(59, 222);
+            this.lblSubject.Location = new System.Drawing.Point(57, 249);
             this.lblSubject.Name = "lblSubject";
             this.lblSubject.Size = new System.Drawing.Size(43, 13);
             this.lblSubject.TabIndex = 8;
@@ -108,7 +110,7 @@
             // 
             // txtSubject
             // 
-            this.txtSubject.Location = new System.Drawing.Point(140, 222);
+            this.txtSubject.Location = new System.Drawing.Point(138, 249);
             this.txtSubject.Name = "txtSubject";
             this.txtSubject.ReadOnly = true;
             this.txtSubject.Size = new System.Drawing.Size(903, 20);
@@ -118,7 +120,7 @@
             // lblBody
             // 
             this.lblBody.AutoSize = true;
-            this.lblBody.Location = new System.Drawing.Point(59, 259);
+            this.lblBody.Location = new System.Drawing.Point(57, 286);
             this.lblBody.Name = "lblBody";
             this.lblBody.Size = new System.Drawing.Size(31, 13);
             this.lblBody.TabIndex = 10;
@@ -137,7 +139,7 @@
             // lblBCC
             // 
             this.lblBCC.AutoSize = true;
-            this.lblBCC.Location = new System.Drawing.Point(59, 179);
+            this.lblBCC.Location = new System.Drawing.Point(57, 206);
             this.lblBCC.Name = "lblBCC";
             this.lblBCC.Size = new System.Drawing.Size(28, 13);
             this.lblBCC.TabIndex = 21;
@@ -145,7 +147,7 @@
             // 
             // txtBCC
             // 
-            this.txtBCC.Location = new System.Drawing.Point(140, 176);
+            this.txtBCC.Location = new System.Drawing.Point(138, 203);
             this.txtBCC.Name = "txtBCC";
             this.txtBCC.ReadOnly = true;
             this.txtBCC.Size = new System.Drawing.Size(903, 20);
@@ -170,17 +172,35 @@
             // 
             // webBody
             // 
-            this.webBody.Location = new System.Drawing.Point(141, 259);
+            this.webBody.Location = new System.Drawing.Point(139, 286);
             this.webBody.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBody.Name = "webBody";
             this.webBody.Size = new System.Drawing.Size(902, 306);
             this.webBody.TabIndex = 28;
+            // 
+            // lblDate
+            // 
+            this.lblDate.AutoSize = true;
+            this.lblDate.Location = new System.Drawing.Point(57, 40);
+            this.lblDate.Name = "lblDate";
+            this.lblDate.Size = new System.Drawing.Size(30, 13);
+            this.lblDate.TabIndex = 29;
+            this.lblDate.Text = "Date";
+            // 
+            // dteDate
+            // 
+            this.dteDate.Location = new System.Drawing.Point(138, 40);
+            this.dteDate.Name = "dteDate";
+            this.dteDate.Size = new System.Drawing.Size(200, 20);
+            this.dteDate.TabIndex = 30;
             // 
             // EmailApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1164, 641);
+            this.Controls.Add(this.dteDate);
+            this.Controls.Add(this.lblDate);
             this.Controls.Add(this.webBody);
             this.Controls.Add(this.txtBCC);
             this.Controls.Add(this.lblBCC);
@@ -222,5 +242,7 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem configureToolStripMenuItem;
         private System.Windows.Forms.WebBrowser webBody;
+        private System.Windows.Forms.Label lblDate;
+        private System.Windows.Forms.DateTimePicker dteDate;
     }
 }

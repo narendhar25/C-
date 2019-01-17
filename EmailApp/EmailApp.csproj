@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -96,12 +97,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="C:\Users\narendhar.pannala\Documents\Visual Studio 2015\Projects\Practice\EmailService\EmailService.csproj">
-      <Project>{30C19ACC-AA11-45F7-AAEA-D3D630FDFB3B}</Project>
+    <ProjectReference Include="..\EmailService\EmailService.csproj">
+      <Project>{30c19acc-aa11-45f7-aaea-d3d630fdfb3b}</Project>
       <Name>EmailService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LoggerService\LoggerService.csproj">
+      <Project>{F6A3E7F1-4373-4704-AB9A-976CD95D53D7}</Project>
+      <Name>LoggerService</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

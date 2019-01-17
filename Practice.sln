@@ -37,17 +37,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PracticeMVC", "PracticeMVC\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVCDefaultWebTemplate", "MVCDefaultWebTemplate\MVCDefaultWebTemplate.csproj", "{15AA1E1E-460E-4D68-A9B4-FAC88D69ED51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeFirstDb", "CodeFirstDb\CodeFirstDb.csproj", "{2366E997-E436-476C-AB4D-33C1DE20A337}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeFirstDb", "CodeFirstDb\CodeFirstDb.csproj", "{2366E997-E436-476C-AB4D-33C1DE20A337}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailService", "EmailService\EmailService.csproj", "{30C19ACC-AA11-45F7-AAEA-D3D630FDFB3B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazorPages", "RazorPages\RazorPages.csproj", "{948B968A-EC28-45EA-BC3A-65E1CEB79AE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JWTWebAPI", "JWTWebAPI\JWTWebAPI.csproj", "{9D1C5ACF-9DFA-495E-82FD-0FFF24E34F24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JWTWebAPI", "JWTWebAPI\JWTWebAPI.csproj", "{9D1C5ACF-9DFA-495E-82FD-0FFF24E34F24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication2", "WebApplication2\WebApplication2.csproj", "{2279012B-8AD8-44B9-8E70-47509FE96710}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication2", "WebApplication2\WebApplication2.csproj", "{2279012B-8AD8-44B9-8E70-47509FE96710}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailApp", "EmailApp\EmailApp.csproj", "{90C92383-2447-46F1-93C8-04465FEA5FE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoggerService", "LoggerService\LoggerService.csproj", "{F6A3E7F1-4373-4704-AB9A-976CD95D53D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JWTNetFramework", "JWTNetFramework\JWTNetFramework.csproj", "{4C826528-5633-4FED-B948-E84A758EE736}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -135,6 +139,14 @@ Global
 		{90C92383-2447-46F1-93C8-04465FEA5FE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90C92383-2447-46F1-93C8-04465FEA5FE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90C92383-2447-46F1-93C8-04465FEA5FE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6A3E7F1-4373-4704-AB9A-976CD95D53D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6A3E7F1-4373-4704-AB9A-976CD95D53D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6A3E7F1-4373-4704-AB9A-976CD95D53D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6A3E7F1-4373-4704-AB9A-976CD95D53D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C826528-5633-4FED-B948-E84A758EE736}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C826528-5633-4FED-B948-E84A758EE736}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C826528-5633-4FED-B948-E84A758EE736}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C826528-5633-4FED-B948-E84A758EE736}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

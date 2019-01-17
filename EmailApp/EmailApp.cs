@@ -1,7 +1,11 @@
 ﻿using EmailService;
+using EmailService.Factory;
+using EmailService.Factory.Interface;
+using LoggerService;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -14,16 +18,23 @@ namespace EmailApp
 {
     public partial class EmailApp : Form
     {
+        #region Private Varaibles
+        private MailService mailService;
+        private LoggerBase logger;
+        #endregion
         public EmailApp()
         {
+            
             InitializeComponent();
+            IEmailServiceFactory emailServiceFactory = new EmailServiceFactory();
+            mailService = emailServiceFactory.GetMailServiceInstance();
+            logger = LoggerFactory<FileLogger>.GetInstance(new FileConfigBase() { filePath = ConfigurationManager.AppSettings["LoggerFolderPath"].ToString() });
             ReBindValues();
         }
 
         private void btnSendMail_Click(object sender, EventArgs e)
         {
-            EmailService.MailService mailService = new MailService();
-            if (mailService.SendMail())
+            if (mailService.SendMail(dteDate.Text))
             {
                 MessageBox.Show("Email sent successfully");
             }
@@ -50,21 +61,30 @@ namespace EmailApp
         }
         public void ReBindValues()
         {
-            EmailService.MailService mailService = new MailService();
-            EmailConfiguration emailConfiguration = mailService.GetEmailConfiguration();
-            if (emailConfiguration != null)
+            try
             {
-                txtFrom.Text = emailConfiguration.From;
-                txtTo.Text = string.Join(",", emailConfiguration.To);
-                txtCC.Text = string.Join(",", emailConfiguration.CC);
-                txtBCC.Text = string.Join(",", emailConfiguration.BCC);
-                txtSubject.Text = emailConfiguration.Subject;
-                webBody.DocumentText = mailService.GetEmailBody();
-                btnSendMail.Visible = true;
+                EmailConfiguration emailConfiguration = null; //mailService.GetEmailConfiguration();
+                //if (emailConfiguration != null)
+                //{
+                    txtFrom.Text = emailConfiguration.From;
+                    txtTo.Text = string.Join(",", emailConfiguration.To);
+                    txtCC.Text = string.Join(",", emailConfiguration.CC);
+                    txtBCC.Text = string.Join(",", emailConfiguration.BCC);
+                    txtSubject.Text = emailConfiguration.Subject;
+                    webBody.DocumentText = mailService.GetEmailBody(dteDate.Value.ToShortDateString());
+
+                    btnSendMail.Visible = true;
+                //}
+                //else
+                //{
+                //    btnSendMail.Visible = false;
+                //}
+
             }
-            else
+            catch (Exception ex)
             {
-                btnSendMail.Visible = false;
+                logger.Log(ex);
+                throw;
             }
         }
     }

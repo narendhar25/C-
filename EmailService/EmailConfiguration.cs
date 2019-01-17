@@ -18,5 +18,6 @@ namespace EmailService
         public string EmailBody { get; set; }
         public bool ReadFromGoogleSheet { get; set; }
         public string GoogleSheetURL { get; set; }
+        public bool IsStatusAvailble { get; set; }
     }
 }

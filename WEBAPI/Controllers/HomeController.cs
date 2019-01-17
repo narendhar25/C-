@@ -13,8 +13,9 @@ namespace WEBAPI.Controllers
     public class HomeController : ApiController
     {
 
-        [EnableCors(origins: "http://mywebclient.azurewebsites.net", headers: "*", methods: "*")]
-        public Collection<StudentDetails> GetDetails(int id)
+        //[EnableCors(origins: "http://mywebclient.azurewebsites.net", headers: "*", methods: "*")]
+        [HttpGet]
+        public Collection<StudentDetails> GetDetails()
         {
             Collection<StudentDetails> details = null;
             try

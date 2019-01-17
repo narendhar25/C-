@@ -38,7 +38,14 @@ namespace JWTWebAPI
             // return null if user not found
             if (user == null)
                 return null;
-
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Secret));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var claims = new[] {
+                    new Claim(JwtRegisteredClaimNames.Sub, username),
+                    new Claim(JwtRegisteredClaimNames.Email, "fsdfsdf"),
+                    new Claim("DateOfJoing", "20-06-1992"),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                    };
             // authentication successful so generate jwt token
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -51,7 +58,7 @@ namespace JWTWebAPI
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var token = new JwtSecurityToken("abc.com","abc.com",claims,expires: DateTime.Now.AddMinutes(120),signingCredentials: credentials);
             user.Token = tokenHandler.WriteToken(token);
 
             // remove password before returning

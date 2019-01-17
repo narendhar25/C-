@@ -5,6 +5,7 @@ using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
 using Google.Apis.Util.Store;
+using LoggerService;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -66,7 +67,7 @@ namespace EmailService
             }
 
         }
-        public bool SendMail()
+        public bool SendMail(string date)
         {
             try
             {
@@ -92,7 +93,7 @@ namespace EmailService
                     });
                 }
                 mail.Subject = configuration.Subject.Replace("{date}", DateTime.Now.ToString("dd-MM-yyyy"));
-                mail.Body = GetEmailBody();
+                mail.Body = GetEmailBody(date);
                 mail.IsBodyHtml = true;
                 SmtpServer.Port = 587;
                 SmtpServer.Credentials = new System.Net.NetworkCredential(configuration.From, configuration.Password);
@@ -113,19 +114,26 @@ namespace EmailService
             return this.configuration;
         }
 
-        public string GetEmailBody()
+        public string GetEmailBody(string date)
         {
             string message = "";
             string messageFromsheet = null;
             message = configuration.EmailBody;
             if (configuration.ReadFromGoogleSheet)
             {
-                Tuple<List<string>, List<List<string>>> tuple = ReadFromGoogleSheet();
-                messageFromsheet = FormatMesssage(tuple.Item1, tuple.Item2);
+                Tuple<List<string>, List<List<string>>,bool> tuple = ReadFromGoogleSheet(string.IsNullOrWhiteSpace(date)?DateTime.Now.ToString():date);
+                if (tuple.Item3)
+                {
+                    messageFromsheet = FormatMesssage(tuple.Item1, tuple.Item2);
+                }
             }
             if (!string.IsNullOrWhiteSpace(messageFromsheet))
             {
                 message += "<br><br>" + messageFromsheet.ToString();
+            }
+            else
+            {
+                message += "<br><br>" + "<b style='color:red'>Invalid status</b>";
             }
             return message;
         }
@@ -195,7 +203,7 @@ namespace EmailService
 
             }
         }
-        private Tuple<List<string>, List<List<string>>> ReadFromGoogleSheet()
+        private Tuple<List<string>, List<List<string>>,bool> ReadFromGoogleSheet(string date)
         {
             try
             {
@@ -218,14 +226,15 @@ namespace EmailService
                         service.Spreadsheets.Values.Get(spreadsheetId[spreadsheetId.Length - 2], range);
                 ValueRange response = request.Execute();
                 IList<IList<Object>> values = response.Values;
-                List<List<Object>> todaysStatus = new List<List<Object>>() ;
-                GetTodayStatus(values,ref todaysStatus);
+                List<List<Object>> todaysStatus = new List<List<Object>>();
+                bool isTodayStatus = false;
+                GetTodayStatus(values, ref todaysStatus, ref isTodayStatus, date);
                 List<string> columns = (from p in values[0] select p.ToString()).ToList();
                 columns.RemoveRange(0, 2);
                 columns.RemoveRange(5, 4);
                 values.RemoveAt(0);
-                List<List<string>> rows = values.Select(s => s.Select(a => a.ToString()).ToList()).ToList();
-                return new Tuple<List<string>, List<List<string>>>(columns, rows);
+                List<List<string>> rows = todaysStatus.Select(s => s.Select(a => a.ToString()).ToList()).ToList();
+                return new Tuple<List<string>, List<List<string>>, bool>(columns, rows, isTodayStatus);
             }
             catch (Exception ex)
             {
@@ -304,18 +313,26 @@ namespace EmailService
             }
             return value;
         }
-        private void GetTodayStatus(IList<IList<Object>> Status,ref List<List<Object>> todaysStatus)
+        private void GetTodayStatus(IList<IList<Object>> Status, ref List<List<Object>> todaysStatus, ref bool isTodayStatus, string date)
         {
-            for(int count = 0; count < Status.Count; count++)
+            for (int count = 1; count < Status.Count; count++)
             {
-                if (!string.IsNullOrWhiteSpace(Status[Status.Count - count].ElementAt(1).ToString()))
+                string todayDate = Status[Status.Count - count].ElementAt(1).ToString();
+                List<Object> status = (List<Object>)Status[Status.Count - count];
+                status.RemoveRange(0, 2);
+                status.RemoveRange(5, status.Count - 5);
+                if (!string.IsNullOrWhiteSpace(todayDate))
                 {
-                    todaysStatus.Add((List<Object>)Status[Status.Count - count]);
+                    if (Convert.ToDateTime(todayDate) == Convert.ToDateTime(date))
+                    {
+                        isTodayStatus = true;
+                    }
+                    todaysStatus.Add(status);
                     break;
                 }
                 else
                 {
-                    todaysStatus.Add((List<Object>)Status[Status.Count - count]);
+                    todaysStatus.Add(status);
                 }
             }
             todaysStatus.Reverse();
