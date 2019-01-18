@@ -63,9 +63,9 @@ namespace EmailApp
         {
             try
             {
-                EmailConfiguration emailConfiguration = null; //mailService.GetEmailConfiguration();
-                //if (emailConfiguration != null)
-                //{
+                EmailConfiguration emailConfiguration = mailService.GetEmailConfiguration();
+                if (emailConfiguration != null)
+                {
                     txtFrom.Text = emailConfiguration.From;
                     txtTo.Text = string.Join(",", emailConfiguration.To);
                     txtCC.Text = string.Join(",", emailConfiguration.CC);
@@ -74,11 +74,11 @@ namespace EmailApp
                     webBody.DocumentText = mailService.GetEmailBody(dteDate.Value.ToShortDateString());
 
                     btnSendMail.Visible = true;
-                //}
-                //else
-                //{
-                //    btnSendMail.Visible = false;
-                //}
+                }
+                else
+                {
+                    btnSendMail.Visible = false;
+                }
 
             }
             catch (Exception ex)

@@ -161,7 +161,7 @@ namespace EmailApp
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 throw;
